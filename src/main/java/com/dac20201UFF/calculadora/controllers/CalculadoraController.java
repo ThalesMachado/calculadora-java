@@ -13,15 +13,14 @@ import org.springframework.web.bind.annotation.CookieValue;
 public class CalculadoraController {
 
     @RequestMapping("/")
-    public String index(Model modelo, @CookieValue(value = "numeroVisitas", defaultValue = "1") String visitas,
+    public String index(Model modelo, @CookieValue(value = "numeroVisitas") String visitas,
             HttpServletResponse response) {
-        System.out.println(visitas);
-        Integer numeroVisitas = Integer.parseInt(visitas);
+
+        Integer numeroVisitas = !visitas.isBlank() ? Integer.parseInt(visitas) : 1;
         numeroVisitas = numeroVisitas++;
-        visitas = numeroVisitas.toString();
-        Cookie cookie = new Cookie("numeroVisitas", visitas);
+        Cookie cookie = new Cookie("numeroVisitas", numeroVisitas.toString());
         response.addCookie(cookie);
-        modelo.addAttribute("numeroVisitas", visitas);
+        modelo.addAttribute("numeroVisitas", numeroVisitas);
         return "index";
     }
 
